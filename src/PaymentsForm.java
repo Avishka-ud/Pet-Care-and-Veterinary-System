@@ -1,0 +1,882 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import com.petcare.database.DaBConnection;
+/**
+ *
+ * @author avish
+ */
+public class PaymentsForm extends javax.swing.JFrame {
+    
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PaymentsForm.class.getName());
+
+    /**
+     * Creates new form PaymentsForm
+     */
+    public PaymentsForm() {
+        initComponents();
+         loadPayments();
+    }
+    
+    private boolean validatePayment() {
+
+    // Appointment ID validation
+    if (txtAppointmentID.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "Please enter Appointment ID!");
+        txtAppointmentID.requestFocus();
+        return false;
+    }
+
+    try {
+        int appointmentID = Integer.parseInt(
+                txtAppointmentID.getText().trim());
+
+        if (appointmentID <= 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Appointment ID must be greater than zero!");
+            txtAppointmentID.requestFocus();
+            return false;
+        }
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "Appointment ID must contain numbers only!");
+        txtAppointmentID.requestFocus();
+        return false;
+    }
+
+    // Owner Name validation
+    if (txtOwnerName.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "Please enter Owner Name!");
+        txtOwnerName.requestFocus();
+        return false;
+    }
+
+    // Amount validation
+    if (txtAmount.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "Please enter Amount!");
+        txtAmount.requestFocus();
+        return false;
+    }
+
+    try {
+        double amount = Double.parseDouble(
+                txtAmount.getText().trim());
+
+        if (!Double.isFinite(amount) || amount <= 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Amount must be greater than zero!");
+            txtAmount.requestFocus();
+            return false;
+        }
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "Please enter a valid Amount!");
+        txtAmount.requestFocus();
+        return false;
+    }
+
+    // Payment Date validation
+    if (txtPaymentDate.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "Please enter Payment Date!");
+        txtPaymentDate.requestFocus();
+        return false;
+    }
+
+    // Payment Method validation
+    if (cmbPaymentMethod.getSelectedIndex() == 0) {
+        JOptionPane.showMessageDialog(this,
+                "Please select Payment Method!");
+        cmbPaymentMethod.requestFocus();
+        return false;
+    }
+
+    // Payment Status validation
+    if (cmbPaymentStatus.getSelectedIndex() == 0) {
+        JOptionPane.showMessageDialog(this,
+                "Please select Payment Status!");
+        cmbPaymentStatus.requestFocus();
+        return false;
+    }
+
+    return true;
+}
+    
+    private void loadPayments() {
+
+    String sql = "SELECT * FROM Payments ORDER BY PaymentID DESC";
+
+    try (Connection con = DaBConnection.getConnection();
+         PreparedStatement pst = con.prepareStatement(sql);
+         ResultSet rs = pst.executeQuery()) {
+
+        DefaultTableModel model =
+                (DefaultTableModel) tblPayments.getModel();
+
+        model.setRowCount(0);
+
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getInt("PaymentID"),
+                rs.getInt("AppointmentID"),
+                rs.getString("OwnerName"),
+                rs.getBigDecimal("Amount"),
+                rs.getDate("PaymentDate"),
+                rs.getString("PaymentMethod"),
+                rs.getString("PaymentStatus")
+            });
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this,
+                "Unable to load payments: " + e.getMessage());
+    }
+}
+    
+    private void clearFields() {
+
+    txtPaymentID.setText("");
+    txtAppointmentID.setText("");
+    txtOwnerName.setText("");
+    txtAmount.setText("");
+    txtPaymentDate.setText("");
+    txtDescription.setText("");
+
+    cmbPaymentMethod.setSelectedIndex(0);
+    cmbPaymentStatus.setSelectedIndex(0);
+
+    txtAppointmentID.requestFocus();
+}
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel15 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        txtPaymentID = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txtOwnerName = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        txtAppointmentID = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        txtPetName = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        txtAmount = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        txtPaymentDate = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        txtDescription = new javax.swing.JTextField();
+        cmbPaymentMethod = new javax.swing.JComboBox<>();
+        cmbPaymentStatus = new javax.swing.JComboBox<>();
+        btnSave = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnSearch = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
+        btnBackToDash = new javax.swing.JButton();
+        btnLogout1 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblPayments = new javax.swing.JTable();
+        jLabel16 = new javax.swing.JLabel();
+
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(76, 29, 149));
+        jLabel15.setText("Repots Details");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel4.setBackground(new java.awt.Color(204, 204, 255));
+        jPanel4.setForeground(new java.awt.Color(204, 204, 255));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(76, 29, 149));
+        jLabel2.setText("Payment Management");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(100, 80, 160));
+        jLabel3.setText("Manage paet care Service Payments");
+
+        jLabel26.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/icons8-paw-print-100.png"))); // NOI18N
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(45, 27, 78));
+        jLabel6.setText("Payment ID:");
+
+        txtPaymentID.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(45, 27, 78));
+        jLabel7.setText("Appointment ID:");
+
+        txtOwnerName.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(45, 27, 78));
+        jLabel8.setText("Owner Name:");
+
+        txtAppointmentID.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(45, 27, 78));
+        jLabel9.setText("Pet Name:");
+
+        txtPetName.setBackground(new java.awt.Color(255, 255, 255));
+        txtPetName.addActionListener(this::txtPetNameActionPerformed);
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(45, 27, 78));
+        jLabel10.setText("Amount (Rs.):");
+
+        txtAmount.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(45, 27, 78));
+        jLabel11.setText("Payment  Date:");
+
+        txtPaymentDate.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(45, 27, 78));
+        jLabel12.setText("Payment Method:");
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(45, 27, 78));
+        jLabel13.setText("Description");
+
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(45, 27, 78));
+        jLabel14.setText("Payment Status:");
+
+        txtDescription.setBackground(new java.awt.Color(255, 255, 255));
+
+        cmbPaymentMethod.setBackground(new java.awt.Color(255, 255, 255));
+        cmbPaymentMethod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Payment Method", "Cash", "Credit Card", "Debit Card", "Bank Transfer", "Online Payment", " " }));
+
+        cmbPaymentStatus.setBackground(new java.awt.Color(255, 255, 255));
+        cmbPaymentStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Payment Status", "Pending", "Paid", "Failed", "Refunded" }));
+
+        btnSave.setBackground(new java.awt.Color(105, 45, 195));
+        btnSave.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(255, 255, 255));
+        btnSave.setText("Save");
+        btnSave.addActionListener(this::btnSaveActionPerformed);
+
+        btnUpdate.setBackground(new java.awt.Color(45, 125, 235));
+        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(this::btnUpdateActionPerformed);
+
+        btnSearch.setBackground(new java.awt.Color(35, 165, 100));
+        btnSearch.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(this::btnSearchActionPerformed);
+
+        btnDelete.setBackground(new java.awt.Color(230, 45, 70));
+        btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(this::btnDeleteActionPerformed);
+
+        btnRefresh.setBackground(new java.awt.Color(51, 0, 51));
+        btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnRefresh.setForeground(new java.awt.Color(255, 255, 255));
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+
+        btnClear.setBackground(new java.awt.Color(255, 153, 0));
+        btnClear.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnClear.setForeground(new java.awt.Color(255, 255, 255));
+        btnClear.setText("Clear");
+        btnClear.addActionListener(this::btnClearActionPerformed);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel13)
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel14))
+                .addGap(76, 76, 76)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtDescription)
+                    .addComponent(txtPaymentDate)
+                    .addComponent(txtAmount)
+                    .addComponent(txtPetName)
+                    .addComponent(txtOwnerName)
+                    .addComponent(txtPaymentID)
+                    .addComponent(txtAppointmentID)
+                    .addComponent(cmbPaymentMethod, 0, 302, Short.MAX_VALUE)
+                    .addComponent(cmbPaymentStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtPaymentID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtAppointmentID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(txtOwnerName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(txtPetName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(45, 45, 45)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(txtAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(txtPaymentDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(cmbPaymentMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(cmbPaymentStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(txtDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSave)
+                    .addComponent(btnUpdate)
+                    .addComponent(btnSearch)
+                    .addComponent(btnDelete)
+                    .addComponent(btnRefresh)
+                    .addComponent(btnClear))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+
+        btnBackToDash.setBackground(new java.awt.Color(45, 125, 235));
+        btnBackToDash.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnBackToDash.setForeground(new java.awt.Color(255, 255, 255));
+        btnBackToDash.setText("<--Back to Dashboard");
+        btnBackToDash.addActionListener(this::btnBackToDashActionPerformed);
+
+        btnLogout1.setBackground(new java.awt.Color(255, 102, 102));
+        btnLogout1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnLogout1.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogout1.setText("Logout");
+        btnLogout1.addActionListener(this::btnLogout1ActionPerformed);
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        tblPayments.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Pament ID", "Appointment ID", "Owner Name", "Amount", "Payment Date", "Payment Method", "Status"
+            }
+        ));
+        jScrollPane1.setViewportView(tblPayments);
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(76, 29, 149));
+        jLabel16.setText("Payments Records");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 771, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(256, 256, 256)
+                        .addComponent(jLabel16)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
+        );
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(btnBackToDash, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLogout1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel26)
+                        .addGap(36, 36, 36)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3))
+                    .addComponent(jLabel26))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnBackToDash)
+                    .addComponent(btnLogout1))
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(12, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        
+
+    if (txtPaymentID.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "Please select a Payment first!");
+        return;
+    }
+
+    if (!validatePayment()) {
+        return;
+    }
+
+    String sql = "UPDATE Payments SET AppointmentID=?, OwnerName=?, "
+            + "Amount=?, PaymentDate=?, PaymentMethod=?, "
+            + "PaymentStatus=?, Description=? WHERE PaymentID=?";
+
+    try (Connection con = DaBConnection.getConnection();
+         PreparedStatement pst = con.prepareStatement(sql)) {
+
+        pst.setInt(1, Integer.parseInt(
+                txtAppointmentID.getText().trim()));
+
+        pst.setString(2, txtOwnerName.getText().trim());
+
+        pst.setBigDecimal(3, new java.math.BigDecimal(
+                txtAmount.getText().trim()));
+
+        pst.setDate(4, java.sql.Date.valueOf(
+                txtPaymentDate.getText().trim()));
+
+        pst.setString(5,
+                cmbPaymentMethod.getSelectedItem().toString());
+
+        pst.setString(6,
+                cmbPaymentStatus.getSelectedItem().toString());
+
+        pst.setString(7, txtDescription.getText().trim());
+
+        pst.setInt(8, Integer.parseInt(
+                txtPaymentID.getText().trim()));
+
+        int rows = pst.executeUpdate();
+
+        if (rows > 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Payment updated successfully!");
+            loadPayments();
+            clearFields();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Payment ID not found!");
+        }
+
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this,
+                "Please check Payment ID, Amount and Date.");
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this,
+                "Database error: " + e.getMessage());
+    }
+
+
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+
+
+    if (!validatePayment()) {
+        return;
+    }
+
+    String sql = "INSERT INTO Payments "
+            + "(AppointmentID, OwnerName, Amount, PaymentDate, "
+            + "PaymentMethod, PaymentStatus, Description) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+    try (Connection con = DaBConnection.getConnection();
+         PreparedStatement pst = con.prepareStatement(sql)) {
+
+        pst.setInt(1, Integer.parseInt(
+                txtAppointmentID.getText().trim()));
+
+        pst.setString(2, txtOwnerName.getText().trim());
+
+        pst.setBigDecimal(3, new java.math.BigDecimal(
+                txtAmount.getText().trim()));
+
+        pst.setDate(4, java.sql.Date.valueOf(
+                txtPaymentDate.getText().trim()));
+
+        pst.setString(5,
+                cmbPaymentMethod.getSelectedItem().toString());
+
+        pst.setString(6,
+                cmbPaymentStatus.getSelectedItem().toString());
+
+        pst.setString(7, txtDescription.getText().trim());
+
+        pst.executeUpdate();
+
+        JOptionPane.showMessageDialog(this,
+                "Payment saved successfully!");
+
+        loadPayments();
+        clearFields();
+
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this,
+                "Enter the date in yyyy-MM-dd format. Example: 2026-10-30");
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this,
+                "Database error: " + e.getMessage());
+    }
+
+        
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+       
+
+    if (txtPaymentID.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "Please enter Payment ID!");
+        return;
+    }
+
+    String sql = "SELECT * FROM Payments WHERE PaymentID=?";
+
+    try (Connection con = DaBConnection.getConnection();
+         PreparedStatement pst = con.prepareStatement(sql)) {
+
+        pst.setInt(1, Integer.parseInt(
+                txtPaymentID.getText().trim()));
+
+        try (ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+
+                txtAppointmentID.setText(
+                        rs.getString("AppointmentID"));
+
+                txtOwnerName.setText(
+                        rs.getString("OwnerName"));
+
+                txtAmount.setText(
+                        rs.getString("Amount"));
+
+                txtPaymentDate.setText(
+                        rs.getString("PaymentDate"));
+
+                cmbPaymentMethod.setSelectedItem(
+                        rs.getString("PaymentMethod"));
+
+                cmbPaymentStatus.setSelectedItem(
+                        rs.getString("PaymentStatus"));
+
+                txtDescription.setText(
+                        rs.getString("Description"));
+
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Payment not found!");
+            }
+        }
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "Payment ID must contain numbers only!");
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this,
+                "Database error: " + e.getMessage());
+    }
+
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+       
+
+    if (txtPaymentID.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+                "Please select a Payment to delete!");
+        return;
+    }
+
+    int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to delete this payment?",
+            "Confirm Delete",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirm != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    String sql = "DELETE FROM Payments WHERE PaymentID=?";
+
+    try (Connection con = DaBConnection.getConnection();
+         PreparedStatement pst = con.prepareStatement(sql)) {
+
+        pst.setInt(1, Integer.parseInt(
+                txtPaymentID.getText().trim()));
+
+        int rows = pst.executeUpdate();
+
+        if (rows > 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Payment deleted successfully!");
+            loadPayments();
+            clearFields();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Payment ID not found!");
+        }
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "Invalid Payment ID!");
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this,
+                "Database error: " + e.getMessage());
+    }
+
+
+    
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        clearFields();
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        loadPayments(); 
+       
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnBackToDashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackToDashActionPerformed
+
+        DashboardForm dashboard = new DashboardForm();
+        dashboard.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnBackToDashActionPerformed
+
+    private void btnLogout1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogout1ActionPerformed
+        int choice = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to logout?",
+            "Logout",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (choice == JOptionPane.YES_OPTION) {
+        LoginForm login = new LoginForm();
+        login.setVisible(true);
+        this.dispose();
+    }
+    }//GEN-LAST:event_btnLogout1ActionPerformed
+
+    private void txtPetNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPetNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPetNameActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> new PaymentsForm().setVisible(true));
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBackToDash;
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnLogout1;
+    private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnUpdate;
+    private javax.swing.JComboBox<String> cmbPaymentMethod;
+    private javax.swing.JComboBox<String> cmbPaymentStatus;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblPayments;
+    private javax.swing.JTextField txtAmount;
+    private javax.swing.JTextField txtAppointmentID;
+    private javax.swing.JTextField txtDescription;
+    private javax.swing.JTextField txtOwnerName;
+    private javax.swing.JTextField txtPaymentDate;
+    private javax.swing.JTextField txtPaymentID;
+    private javax.swing.JTextField txtPetName;
+    // End of variables declaration//GEN-END:variables
+}
